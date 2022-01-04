@@ -1,6 +1,6 @@
 import { authRouter } from './routes/authRoutes';
 import { usersRoutes } from './routes/userRoutes';
-import express, { Request, Response, NextFunction } from 'express';
+import express from 'express';
 import { errorHandler } from './middlewares/errorHandlerMiddleware';
 import { bearerAuthMiddleware } from './middlewares/bearerAuthMiddleware';
 
