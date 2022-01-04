@@ -1,8 +1,8 @@
-import express, { Request, Response, NextFunction } from 'express';
-import { errorHandler } from './middlewares/errorHandlerMiddleware.ts/errorHandler';
-import { usersRoutes } from './routes/userRoutes';
 import { authRouter } from './routes/authRoutes';
-import { basicAuthMiddleware } from './middlewares/authorizationMiddleware/basicAuthMiddleware';
+import { usersRoutes } from './routes/userRoutes';
+import express, { Request, Response, NextFunction } from 'express';
+import { errorHandler } from './middlewares/errorHandlerMiddleware';
+import { bearerAuthMiddleware } from './middlewares/bearerAuthMiddleware';
 
 const app = express();
 const port = 8000;
@@ -12,7 +12,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Setting routes
-app.use(usersRoutes);
+app.use(bearerAuthMiddleware, usersRoutes);
 app.use(authRouter);
 
 // Setting error handler middleware

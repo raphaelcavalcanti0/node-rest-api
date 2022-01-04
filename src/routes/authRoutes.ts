@@ -1,7 +1,7 @@
 import { Router, Request, Response, NextFunction } from "express";
 import JWT from 'jsonwebtoken';
 import { StatusCodes } from "http-status-codes";
-import { basicAuthMiddleware } from "../middlewares/authorizationMiddleware/basicAuthMiddleware";
+import { basicAuthMiddleware } from "../middlewares/basicAuthMiddleware";
 import { ForbiddenError } from "../models/errors/forbiddenErrorModel";
 
 export const authRouter = Router();

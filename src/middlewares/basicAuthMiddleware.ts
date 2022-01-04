@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
-import { ForbiddenError } from "../../models/errors/forbiddenErrorModel";
-import userRepository from "../../repositories/userRepository";
+import { ForbiddenError } from "../models/errors/forbiddenErrorModel";
+import userRepository from "../repositories/userRepository";
 
 
 export const basicAuthMiddleware = async (req: Request, res: Response, next: NextFunction) => {
