@@ -1,4 +1,5 @@
 import express, { Request, Response, NextFunction } from 'express';
+import { errorHandler } from './middlewares/errorHandlerMiddleware.ts/errorHandler';
 import { usersRoutes } from './routes/userRoutes';
 
 const app = express();
@@ -10,6 +11,9 @@ app.use(express.urlencoded({ extended: true }));
 
 // Setting routes
 app.use(usersRoutes);
+
+// Setting error handler
+app.use(errorHandler);
 
 // Starting server
 app.listen(port, () => {

@@ -1,4 +1,5 @@
 import { db } from "../db";
+import { DatabaseError } from "../models/dbErrorsModel";
 import { User } from "../models/userModel";
 
 class UserRepository {
@@ -14,10 +15,15 @@ class UserRepository {
         const query = `SELECT uuid, username FROM app_users WHERE uuid=$1;`;
 
         const values = [uuid];
-        const { rows } = await db.query<User>(query, values);
-        const [user] = rows;
+        try {
+            const { rows } = await db.query<User>(query, values);
+            const [user] = rows;
 
-        return user;
+            return user;
+        } catch (error) {
+            throw new DatabaseError('Erro ao consultar o ID', error);
+        }
+
     }
 
     async create(user: User): Promise<string> {
