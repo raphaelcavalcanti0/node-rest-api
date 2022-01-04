@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
-import { DatabaseError } from "../../models/dbErrorsModel";
+import { DatabaseError } from "../../models/errors/dbErrorsModel";
 
 export const errorHandler = (error: any, req: Request, res: Response, next: NextFunction) => {
     if (error instanceof DatabaseError) {

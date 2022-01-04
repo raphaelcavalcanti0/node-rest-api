@@ -1,5 +1,5 @@
 import { db } from "../db";
-import { DatabaseError } from "../models/dbErrorsModel";
+import { DatabaseError } from "../models/errors/dbErrorsModel";
 import { User } from "../models/userModel";
 
 class UserRepository {
@@ -57,6 +57,25 @@ class UserRepository {
 
         const values = [uuid];
         await db.query(query, values);
+    }
+
+    async findByUsernameAndPassword(username: string, password: string): Promise<User> {
+        const query = `
+            SELECT uuid, username 
+            FROM app_users 
+            WHERE username=$1 and password=crypt($2, 'chave');
+        `;
+
+        const values = [username, password];
+        try {
+            const { rows } = await db.query<User>(query, values);
+            const [user] = rows;
+
+            return user;
+        } catch (error) {
+            throw new DatabaseError('Usuário ou senha incorretos', error);
+        }
+
     }
 
 }
