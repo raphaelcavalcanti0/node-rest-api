@@ -33,5 +33,8 @@ authRouter.post('/api/v1/token', basicAuthMiddleware, async (req: Request, res: 
     } catch (error) {
         next(error);
     }
+})
 
+authRouter.post('/api/v1/token/validate', basicAuthMiddleware, async (req: Request, res: Response, next: NextFunction) => {
+    res.sendStatus(StatusCodes.OK);
 })

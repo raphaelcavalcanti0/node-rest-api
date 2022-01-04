@@ -2,7 +2,7 @@ import { authRouter } from './routes/authRoutes';
 import { usersRoutes } from './routes/userRoutes';
 import express from 'express';
 import { errorHandler } from './middlewares/errorHandlerMiddleware';
-import { bearerAuthMiddleware } from './middlewares/bearerAuthMiddleware';
+import { bearerJwtAuthMiddleware } from './middlewares/bearerJwtAuthMiddleware';
 
 const app = express();
 const port = 8000;
@@ -12,8 +12,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Setting routes
-app.use(bearerAuthMiddleware, usersRoutes);
 app.use(authRouter);
+app.use(bearerJwtAuthMiddleware, usersRoutes);
 
 // Setting error handler middleware
 app.use(errorHandler);
