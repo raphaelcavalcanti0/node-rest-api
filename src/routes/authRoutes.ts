@@ -1,5 +1,5 @@
 import { Router, Request, Response, NextFunction } from "express";
-import JWT from 'jsonwebtoken';
+import JWT, { SignOptions } from 'jsonwebtoken';
 import { StatusCodes } from "http-status-codes";
 import { basicAuthMiddleware } from "../middlewares/basicAuthMiddleware";
 import { ForbiddenError } from "../models/errors/forbiddenErrorModel";
@@ -23,7 +23,7 @@ authRouter.post('/api/v1/token', basicAuthMiddleware, async (req: Request, res: 
         }
 
         const jwtPayload = { username: user.username };
-        const jwtOptions = { subject: user.uuid };
+        const jwtOptions: SignOptions = { subject: user.uuid, expiresIn: '15m' };
         const secretKey = 'secret_key';
 
         const jwt = JWT.sign(jwtPayload, secretKey, jwtOptions);
