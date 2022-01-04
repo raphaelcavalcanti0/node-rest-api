@@ -75,9 +75,7 @@ class UserRepository {
         } catch (error) {
             throw new DatabaseError('Usuário ou senha incorretos', error);
         }
-
     }
-
 }
 
 export default new UserRepository();

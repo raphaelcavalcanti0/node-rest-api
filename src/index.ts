@@ -2,6 +2,7 @@ import express, { Request, Response, NextFunction } from 'express';
 import { errorHandler } from './middlewares/errorHandlerMiddleware.ts/errorHandler';
 import { usersRoutes } from './routes/userRoutes';
 import { authRouter } from './routes/authRoutes';
+import { basicAuthMiddleware } from './middlewares/authorizationMiddleware/basicAuthMiddleware';
 
 const app = express();
 const port = 8000;
@@ -14,7 +15,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(usersRoutes);
 app.use(authRouter);
 
-// Setting error handler
+// Setting error handler middleware
 app.use(errorHandler);
 
 // Starting server

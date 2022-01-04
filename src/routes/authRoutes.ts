@@ -1,34 +1,34 @@
 import { Router, Request, Response, NextFunction } from "express";
+import JWT from 'jsonwebtoken';
+import { StatusCodes } from "http-status-codes";
+import { basicAuthMiddleware } from "../middlewares/authorizationMiddleware/basicAuthMiddleware";
 import { ForbiddenError } from "../models/errors/forbiddenErrorModel";
-import userRepository from "../repositories/userRepository";
 
 export const authRouter = Router();
 
-authRouter.post('/api/v1/token', async (req: Request, res: Response, next: NextFunction) => {
+// “iss” O domínio da aplicação geradora do token
+// “sub” É o assunto do token, mas é muito utilizado para guarda o ID do usuário
+// “aud” Define quem pode usar o token
+// “exp” Data para expiração do token
+// “nbf” Define uma data para qual o token não pode ser aceito antes dela
+// “iat” Data de criação do token
+// “jti” O id do token
+
+authRouter.post('/api/v1/token', basicAuthMiddleware, async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const authorizationHeader = req.headers['authorization'];
+        const user = req.user;
 
-        if (!authorizationHeader) {
-            throw new ForbiddenError('Credenciais não informadas');
+        if (!user) {
+            throw new ForbiddenError('Usuário não informado');
         }
 
-        const [authorizationType, token] = authorizationHeader.split(' ');
+        const jwtPayload = { username: user.username };
+        const jwtOptions = { subject: user.uuid };
+        const secretKey = 'secret_key';
 
-        if (authorizationType !== 'Basic' || !token) {
-            throw new ForbiddenError('Tipo de autenticação inválido');
-        }
+        const jwt = JWT.sign(jwtPayload, secretKey, jwtOptions);
 
-        const tokenContent = Buffer.from(token, 'base64').toString('utf-8');
-
-        const [username, password] = tokenContent.split(':');
-
-        if (!username || !password) {
-            throw new ForbiddenError('Credenciais não preenchidas');
-        }
-
-        const user = await userRepository.findByUsernameAndPassword(username, password);
-
-        console.log(user);
+        res.status(StatusCodes.OK).json({ token: jwt });
 
     } catch (error) {
         next(error);
